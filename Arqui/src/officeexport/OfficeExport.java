@@ -24,26 +24,49 @@ public class OfficeExport {
         LectorExcel lec = new LectorExcel(f);
         ArrayList<Despacho> prueba = lec.getTodos();
         MyStack test = new MyStack();
-        int minimo = test.lowValue(prueba).getMontoTotal();
-        int maximo = test.topValue(prueba).getMontoTotal();
-        int rango = maximo - minimo;
         Secuenciacion sec = new Secuenciacion(prueba);
         ArrayList<Despacho> des = sec.despachado(fechaInicio, fechaDespacho);
-        ArrayList<Articulo> art = sec.mayorDespacho(fechaInicio, fechaDespacho);
+        ArrayList<Articulo> art = sec.conseguirArticulo(fechaInicio, fechaDespacho);
+        ArrayList<Articulo> jiren = sec.listadoArticulos(fechaInicio, fechaDespacho);
+        
+        int minimo = test.lowValue(jiren).getMontoTotal();
+        int maximo = test.topValue(jiren).getMontoTotal();
+        int rango = maximo - minimo;
+        double cuartil1 = minimo + 0.25* rango;
+        double cuartil2 = minimo + 0.5* rango;
+        double cuartil3 = minimo + 0.75* rango;
         for(int j = 0; j < des.size(); j++){
-            System.out.println(des.get(j).getNombreArticulo());
+            System.out.println(des.get(j).getIdTran() + ", " + des.get(j).getNombreArticulo()
+                                + ", " + des.get(j).getMontoTotal());
         }
-        for(int i = 0; i < art.size(); i++){
-            System.out.println(art.get(i).getNombreArticulo());
-        }
-        for(int i = 0; i < prueba.size(); i++){
-            
-            System.out.println("cuartil 1: " + (minimo + 0.25* rango));
-            System.out.println("cuartil 2: " + (minimo + 0.5* rango));
-            System.out.println("cuartil 3: " + (minimo + 0.725* rango));
-            System.out.println(maximo - minimo);
-            System.out.println(prueba.get(i).getMontoTotal());
+        /*for(int i = 0; i < art.size(); i++){
+            System.out.println(art.get(i).getNombreArticulo() + ", " + art.get(i).getMontoTotal());
+        }*/
+        for(int i = 0; i < jiren.size(); i++){
+            if(jiren.get(i).getMontoTotal() >= minimo &&  jiren.get(i).getMontoTotal()<= cuartil1){
+                System.out.println("1 ( " + minimo + "-" + cuartil1 +"), "+ jiren.get(i).getCodArticulo() + ", " +jiren.get(i).getNombreArticulo() + ", " + 
+                                    jiren.get(i).getCantidadUnidades() + ", " + jiren.get(i).getValorUni() + ", " +
+                                    jiren.get(i).getMontoTotal() + ", " + jiren.get(i).getEstado());
             }
+            if(jiren.get(i).getMontoTotal() >= cuartil1 && jiren.get(i).getMontoTotal() <= cuartil2){
+                System.out.println("2(" + cuartil1 + "-" + cuartil2 +"), "+ jiren.get(i).getCodArticulo() + ", " +jiren.get(i).getNombreArticulo() + ", " + 
+                                    jiren.get(i).getCantidadUnidades() + ", " + jiren.get(i).getValorUni() + ", " +
+                                    jiren.get(i).getMontoTotal() + ", " + jiren.get(i).getEstado());
+            }
+            if(jiren.get(i).getMontoTotal() >= cuartil2 &&  jiren.get(i).getMontoTotal()<= cuartil3){
+                System.out.println("3(" + cuartil2 + "-" + cuartil3 +"), "+ jiren.get(i).getCodArticulo() + ", " +jiren.get(i).getNombreArticulo() + ", " + 
+                                    jiren.get(i).getCantidadUnidades() + ", " + jiren.get(i).getValorUni() + ", " +
+                                    jiren.get(i).getMontoTotal() + ", " + jiren.get(i).getEstado());
+            }
+            if(jiren.get(i).getMontoTotal() >= cuartil3 && jiren.get(i).getMontoTotal() <= maximo){
+                System.out.println("4(" + cuartil3 + "-" + maximo +"), "+ jiren.get(i).getCodArticulo() + ", " +jiren.get(i).getNombreArticulo() + ", " + 
+                                    jiren.get(i).getCantidadUnidades() + ", " + jiren.get(i).getValorUni() + ", " +
+                                    jiren.get(i).getMontoTotal() + ", " + jiren.get(i).getEstado());
+            }
+            
+            System.out.println(jiren.get(i).getNombreArticulo() + ", " + jiren.get(i).getMontoTotal());
+        }
+        
     }
     
 }
