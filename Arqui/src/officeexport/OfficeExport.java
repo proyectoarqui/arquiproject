@@ -26,7 +26,6 @@ public class OfficeExport {
         MyStack test = new MyStack();
         Secuenciacion sec = new Secuenciacion(prueba);
         ArrayList<Despacho> des = sec.despachado(fechaInicio, fechaDespacho);
-        ArrayList<Articulo> art = sec.conseguirArticulo(fechaInicio, fechaDespacho);
         ArrayList<Articulo> jiren = sec.listadoArticulos(fechaInicio, fechaDespacho);
         
         int minimo = test.lowValue(jiren).getMontoTotal();
@@ -35,13 +34,13 @@ public class OfficeExport {
         double cuartil1 = minimo + 0.25* rango;
         double cuartil2 = minimo + 0.5* rango;
         double cuartil3 = minimo + 0.75* rango;
+        System.out.println(cuartil1);
+        System.out.println(cuartil2);
+        System.out.println(cuartil3);
         for(int j = 0; j < des.size(); j++){
             System.out.println(des.get(j).getIdTran() + ", " + des.get(j).getNombreArticulo()
                                 + ", " + des.get(j).getMontoTotal());
         }
-        /*for(int i = 0; i < art.size(); i++){
-            System.out.println(art.get(i).getNombreArticulo() + ", " + art.get(i).getMontoTotal());
-        }*/
         for(int i = 0; i < jiren.size(); i++){
             if(jiren.get(i).getMontoTotal() >= minimo &&  jiren.get(i).getMontoTotal()<= cuartil1){
                 System.out.println("1 ( " + minimo + "-" + cuartil1 +"), "+ jiren.get(i).getCodArticulo() + ", " +jiren.get(i).getNombreArticulo() + ", " + 
