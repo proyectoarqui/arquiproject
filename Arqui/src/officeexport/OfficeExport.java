@@ -15,35 +15,85 @@ public class OfficeExport {
     public static void main(String[] args) throws ParseException, IOException {
         
         BufferedReader lector= new BufferedReader(new InputStreamReader(System.in));
+        //File f = new File("/Users/yian/Desktop/Prueba_Excel.xlsx");
+        
+        File f = new File("/Users/yian/Desktop/SergioStore_datos_legacy.xlsx");
+        
+        Prototype proto = new PrototypeDesp(new LectorExcel(f).getTodos());
+        
+        Listado sec = new Listado(proto.clone());
         System.out.println("ingresa fecha de inicio: dd-MM-yyyy");
         SimpleDateFormat dato = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaInicio = dato.parse(lector.readLine());
         System.out.println("ingresa fecha de despacho: dd-MM-yyyy");
         Date fechaDespacho = dato.parse(lector.readLine());
-        //File f = new File("/Users/yian/Desktop/Prueba_Excel.xlsx");
-        
-        File f = new File("/Users/yian/Desktop/SergioStore_datos_legacy.xlsx");
-        LectorExcel lec = new LectorExcel(f);
-        ArrayList<Despacho> prueba = lec.getTodos();
-        MyStack test = new MyStack();
-        Secuenciacion sec = new Secuenciacion(prueba);
         ArrayList<Articulo> jiren = sec.listadoArticulos(fechaInicio, fechaDespacho);
+                      
         int minimo = sec.minimoValor(fechaInicio, fechaDespacho);
         int maximo = sec.maximoValor(fechaInicio, fechaDespacho);
-        Prototype proto = new PrototypeDesp(lec.getTodos());
-        System.out.print(proto.clone().get(0).getNombreArticulo());
-        System.out.print(proto.clone().get(1).getNombreArticulo());
-        System.out.print(proto.clone().get(2).getNombreArticulo());
-        System.out.print(proto.clone().get(3).getNombreArticulo());
-        System.out.print(proto.clone().get(4).getNombreArticulo());
         
+        MyStack test = new MyStack();
+        test.clear();
+        
+        MyList quiz = new MyList();
+        quiz.clear();
+        
+        for(int i = jiren.size() - 1; i >= 0; i--){
+            test.push(jiren.get(i));
+            quiz.insert(jiren.get(i));
+        
+        }
+        for(int i = 0; i < jiren.size(); i++){
+            }
         Exportar excel = new Exportar();
-        if(excel.exportarExcel(jiren, minimo, maximo)){
-            System.out.println("se creo el archivo excel");
+        Pantalla sop = new Pantalla();
+        
+        
+        
+        System.out.println("De que forma desea ver el archivo(segun el numero): ");
+        System.out.println("1.- por pantalla");
+        System.out.println("2.- por archivo excel");
+        System.out.println("3.- por archivo de texto");
+        System.out.println("4.- de las tres formas");
+        int roll = Integer.parseInt(lector.readLine());
+        switch(roll){
+            case 1:
+                if((sop.mostrarPantalla(jiren, minimo, maximo))){
+                    System.out.println("se ve por pantalla");
+                }else{
+                    System.out.println("no se ve por pantalla");
+                }
+            break;
+            
+            case 2:
+                if(excel.exportarExcel(jiren, minimo, maximo, test, quiz)){
+                    System.out.println("se creo el archivo excel");
+                }
+                else{
+                    System.out.println("no se creo el archivo excel");
+                }
+            break;
+            
+            case 3:
+                
+            break;
+            
+            case 4:
+                if(excel.exportarExcel(jiren, minimo, maximo, test, quiz)){
+                    System.out.println("se creo el archivo excel");
+                }
+                else{
+                    System.out.println("no se creo el archivo excel");
+                }
+                if((sop.mostrarPantalla(jiren, minimo, maximo))){
+                    System.out.println("se ve por pantalla");
+                }else{
+                    System.out.println("no se ve por pantalla");
+                }
+                
+            break;    
         }
-        else{
-            System.out.println("no se creo el archivo excel");
-        }
+        
     }
     
 }
